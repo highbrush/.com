@@ -1,0 +1,14 @@
+# Security
+ftp.json
+.firebaserc
+firebase.json
+firebase.slim
+
+# Generated Files
+style.css
+yarn.lock
+public/
+
+# Dependencies
+.git/
+node_modules/

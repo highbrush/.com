@@ -1,0 +1,14 @@
+{
+  "rules": {
+    "live": {
+      "$uid": {
+        ".write": "$uid === auth.uid",
+        ".read": true,
+
+        "title": {".validate": true},
+        "paper": {".validate": true},
+        "$other": {".validate": false}
+      }
+    }
+  }
+}

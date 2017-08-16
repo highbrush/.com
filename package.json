@@ -1,0 +1,28 @@
+{
+  "name": "highbrush",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^4.2.0",
+    "jquery": "^3.2.1",
+    "lodash": "^4.17.4",
+    "normalize.css": "^7.0.0",
+    "paper": "^0.11.4"
+  },
+  "devDependencies": {
+    "firebase-tools": "^3.9.2",
+    "gulp": "^3.9.1",
+    "gulp-coffee": "^2.3.4",
+    "gulp-concat": "^2.6.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-less": "^3.3.2",
+    "gulp-slim": "^0.3.0",
+    "gulp-sourcemaps": "^2.6.0"
+  }
+}

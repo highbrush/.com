@@ -3,4 +3,5 @@
 ###
 app.add 'ui.main',
   init: () ->
-    console.log 'init'
+    $('.draggable').pep
+      useCSSTranslation: false

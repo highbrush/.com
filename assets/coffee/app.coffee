@@ -9,8 +9,8 @@ app =
   init: ->
     paper.setup 'canvas'
 
+    # Setup Tools
     tool = new Tool()
-
     tool.onMouseDown = ->
       ctrl = app.getTool()
       ctrl.onMouseDown.apply ctrl, arguments
@@ -22,6 +22,30 @@ app =
       ctrl.onMouseDrag.apply ctrl, arguments
 
   ###*
+   * Defines a new observer object. Observers are just generic, global controllers with some happy bennies
+   * @param {STRING} id     The unique id for this tool
+   * @param {OBJECT} config The config object
+  ###
+  add: (id, config) ->
+    $ ->
+      # Setup properties
+      _.set config, '_.id', id
+      _.defaults config,
+        init: ->
+      _.set app._, "controller.#{id}", config
+
+      # Run init
+      app.get(id).init()
+
+  ###*
+   * Returns a controller by id
+   * @param  {STRING|NULL} id The id of the controller to retreive
+   * @return {OBJECT}    The tool controller
+  ###
+  get: (id) ->
+    _.get app._, "controller.#{id}"
+
+  ###*
    * Adds a new tool, and activates it
    * @param {STRING} id     The unique id for this tool
    * @param {OBJECT} config The config object
@@ -30,7 +54,7 @@ app =
     $ ->
       # Setup properties
       _.set config, '_.id', id
-      _.set app._, "tool['#{id}']", config
+      _.set app._, "tool.#{id}", config
       config = _.defaults config,
         onMouseDown: ->
         onMouseDrag: ->
@@ -46,7 +70,7 @@ app =
   ###
   getTool: (id) ->
     if !id then id = 'active'
-    _.get app._, "tool['#{id}']"
+    _.get app._, "tool.#{id}"
 
   ###*
    * Sets the current active tool

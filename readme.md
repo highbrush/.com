@@ -20,3 +20,15 @@ Hey, I'm Oz. I build my own digital art tools and then stream myself using them.
 
 ## Whitelabel
 - Open `/assets/slim/index.slim` and make it yours
+
+-------------------------------------------------------------
+
+# Creating tools
+
+Use the `app.addTool(id, config)` method to create new tools. `id` is a _string_ representing the tool (which can later be retreived with `app.getTool(id)`). `config` is an **object** defining the tool. `app.addTool` adds the following automatically to `config`, which you can overwrite:
+
+```coffee
+# Whether to make this tool the default (true) or not (false)
+# - Default tools
+default: false
+```

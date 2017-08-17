@@ -1,7 +1,7 @@
 ###*
- * Controls a brush
+ * Controller for brushes
 ###
-app.add 'ui.main',
+app.add 'ui.brush',
   init: () ->
     $('[data-brush-id]').each ->
       $brush = $ this

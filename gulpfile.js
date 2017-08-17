@@ -92,6 +92,7 @@ gulp.task('vendor', function () {
     'node_modules/dat.gui/build/dat.gui.min.js',
     'node_modules/dat.gui/build/dat.gui.js.map',
     'node_modules/jquery.pep.js/src/jquery.pep.js',
+    'node_modules/mousetrap/mousetrap.min.js',
     'assets/vendor/lodash.min.js'
   ])
     .pipe(gulp.dest('public/assets/vendor/'));

@@ -86,14 +86,13 @@ app =
    * @param {OBJECT} config The config object
   ###
   addStore: (id, config = {}) ->
-    $ ->
-      # Setup properties
-      _.set config, '_.id', id
-      _.set app._, "store.#{id}", config
-      _.defaults config, app._.store.base
+    # Setup properties
+    _.set config, '_.id', id
+    _.set app._, "store.#{id}", config
+    _.defaults config, app._.store.base
 
-      # Autoload data
-      app.getStore(id).initCache()
+    # Autoload data
+    app.getStore(id).initCache()
 
   ###*
    * Returns a store
@@ -118,6 +117,13 @@ app =
          * Stores a cached copy of the store
         ###
         cached: {}
+
+        ###*
+         * Initializes the cache. Requires a store property with the key to load
+        ###
+        initCache: () ->
+          @cached = JSON.parse(localStorage.getItem(@_.id)) or {}
+          return @cached
 
         ###*
          * Gets a cached record
@@ -147,15 +153,6 @@ app =
           return record
 
         ###*
-         * Stores an item to Firebase (and locally)
-         * @param {STR} key   The record to get (by key)
-         * @param {ANY} value The value to store
-         * @return {ANY} The stored value
-        ###
-        setItem: (key, value) ->
-          return @setCached key, value
-
-        ###*
          * Gets a record
          * @param {STR} key The record to get (by key)
          * @param {ANY} defVal The default value
@@ -165,25 +162,19 @@ app =
           return if _.isUndefined val then defVal else  val
 
         ###*
-         * Initializes the cache. Requires a store property with the key to load
+         * Stores an item to Firebase (and locally)
+         * @param {STR} key   The record to get (by key)
+         * @param {ANY} value The value to store
+         * @return {ANY} The stored value
         ###
-        initCache: () ->
-          @cached = JSON.parse(localStorage.getItem(@_.id)) or {}
-          return @cached
-
-        ###*
-         * Removes all the records
-        ###
-        removeAll: () ->
-          localStorage.clear()
-          @cached = {}
-          return
+        setItem: (key, value) ->
+          return @setCached key, value
 
         ###*
          * Removes the record with key
          * @param  {STR/ARR} keys The key(s) to remove
         ###
-        removeAt: (keys) ->
+        removeItem: (keys) ->
           ctrl = this
           if _.isString keys
             keys = [keys]
@@ -192,8 +183,18 @@ app =
             delete ctrl.cached[key]
             return
 
-          @saveCached()
-          return
+        ###*
+         * Removes all the records
+        ###
+        getAll: () ->
+          JSON.parse localStorage.getItem @_.id
+
+        ###*
+         * Removes all the records
+        ###
+        removeAll: () ->
+          localStorage.clear()
+          @cached = {}
 
 $ ->
   app.init()

@@ -1,3 +1,6 @@
+###*
+ * Basic freehand tool
+###
 app.addTool 'freehand',
   default: true
 
@@ -10,3 +13,6 @@ app.addTool 'freehand',
   onMouseDrag: (event) ->
     @path.strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16);
     @path.add event.point
+
+  onMouseUp: (event) ->
+    app.getStore('layers').setItem 1, paper.project.exportJSON()

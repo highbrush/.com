@@ -1,9 +1,25 @@
 ###*
  * Exposes public methods and adds canvas listeners
 ###
+paper.install window
 app =
-  init:
-    paper.install window
+  ###*
+   * Setup listeners
+  ###
+  init: ->
+    paper.setup 'canvas'
+
+    tool = new Tool()
+
+    tool.onMouseDown = ->
+      ctrl = app.getTool()
+      ctrl.onMouseDown.apply ctrl, arguments
+    tool.onMouseUp = ->
+      ctrl = app.getTool()
+      ctrl.onMouseUp.apply ctrl, arguments
+    tool.onMouseDrag = ->
+      ctrl = app.getTool()
+      ctrl.onMouseDrag.apply ctrl, arguments
 
   ###*
    * Adds a new tool, and activates it
@@ -13,10 +29,12 @@ app =
   addTool: (id, config) ->
     $ ->
       # Setup properties
-      tool = new Tool()
       _.set config, '_.id', id
-      _.set config, '_.tool', tool
       _.set app._, "tool['#{id}']", config
+      config = _.defaults config,
+        onMouseDown: ->
+        onMouseDrag: ->
+        onMouseUp: ->
 
       # Activate the tool
       if config.default then app.setTool id
@@ -45,4 +63,5 @@ app =
     tool:
       active: ''
 
-$ -> app.init
+$ ->
+  app.init()

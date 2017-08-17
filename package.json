@@ -13,7 +13,8 @@
     "jquery": "^3.2.1",
     "lodash": "^4.17.4",
     "normalize.css": "^7.0.0",
-    "paper": "^0.11.4"
+    "paper": "^0.11.4",
+    "rebound": "^0.0.15"
   },
   "devDependencies": {
     "firebase-tools": "^3.9.2",

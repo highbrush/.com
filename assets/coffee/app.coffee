@@ -81,11 +81,119 @@ app =
     app._.tool.active = app.getTool id
 
   ###*
+   * Adds a new store, and activates it
+   * @param {STRING} id     The unique id for this store
+   * @param {OBJECT} config The config object
+  ###
+  addStore: (id, config = {}) ->
+    $ ->
+      # Setup properties
+      _.set config, '_.id', id
+      _.set app._, "store.#{id}", config
+      _.defaults config, app._.store.base
+
+      # Autoload data
+      app.getStore(id).initCache()
+
+  ###*
+   * Returns a store
+   * @param  {STRING|NULL} id The id of the store to retreive
+   * @return {OBJECT}    The store
+  ###
+  getStore: (id) ->
+    _.get app._, "store.#{id}"
+
+  ###*
    * Private shit, you probably shouldn't mess with this
   ###
   _:
     tool:
       active: ''
+    store:
+      ###*
+       * Defines the base store class
+      ###
+      base:
+        ###*
+         * Stores a cached copy of the store
+        ###
+        cached: {}
+
+        ###*
+         * Gets a cached record
+         * @param {STR} key The record to get (by key)
+        ###
+        getCached: (key) ->
+          return @cached[key]
+
+        ###*
+         * Updates the store with whatever is in the cache
+        ###
+        saveCached: () ->
+          localStorage.setItem @_.id, JSON.stringify @cached
+          return
+
+        ###*
+         * Sets a cached record
+         * @param {STR} key   The record to get (by key)
+         * @param {ANY} value The value to store
+         * @return {ANY} The stored value
+        ###
+        setCached: (key, value) ->
+          @cached[key] = value
+          record = {}
+          record[key] = value
+          @saveCached()
+          return record
+
+        ###*
+         * Stores an item to Firebase (and locally)
+         * @param {STR} key   The record to get (by key)
+         * @param {ANY} value The value to store
+         * @return {ANY} The stored value
+        ###
+        setItem: (key, value) ->
+          return @setCached key, value
+
+        ###*
+         * Gets a record
+         * @param {STR} key The record to get (by key)
+         * @param {ANY} defVal The default value
+        ###
+        getItem: (key, defVal) ->
+          val = @getCached key
+          return if _.isUndefined val then defVal else  val
+
+        ###*
+         * Initializes the cache. Requires a store property with the key to load
+        ###
+        initCache: () ->
+          @cached = JSON.parse(localStorage.getItem(@_.id)) or {}
+          return @cached
+
+        ###*
+         * Removes all the records
+        ###
+        removeAll: () ->
+          localStorage.clear()
+          @cached = {}
+          return
+
+        ###*
+         * Removes the record with key
+         * @param  {STR/ARR} keys The key(s) to remove
+        ###
+        removeAt: (keys) ->
+          ctrl = this
+          if _.isString keys
+            keys = [keys]
+
+          _.each keys, (key) ->
+            delete ctrl.cached[key]
+            return
+
+          @saveCached()
+          return
 
 $ ->
   app.init()

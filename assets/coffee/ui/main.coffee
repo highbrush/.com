@@ -3,5 +3,8 @@
 ###
 app.add 'ui.main',
   init: () ->
-    $('.draggable').pep
+    $('.highbrush').pep
+      constrainTo: 'window'
       useCSSTranslation: false
+      stop: ->
+        localStorage

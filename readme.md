@@ -32,3 +32,9 @@ Use the `app.addTool(id, config)` method to create new tools. `id` is a _string_
 # - Default tools
 default: false
 ```
+
+-------------------------------------------------------------
+
+# Data Stores
+
+For now, all data is stored in localStorage. To create a store, use the `app.addStore(id, config)` method, which you can later retrieve with `app.getStore(id)`. All stores are autoloaded on page load.

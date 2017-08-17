@@ -31,6 +31,10 @@ Use the `app.addTool(id, config)` method to create new tools. `id` is a _string_
 # Whether to make this tool the default (true) or not (false)
 # - Default tools
 default: false
+
+# List of keyboard shortcuts, where shortcut is any valid keyboard shortcut string (see https://craig.is/killing/mice). Method is a STRING or FUNCTION. If it's a string then it's interpreted as a method name on the tool class, otherwise the method itself is called.
+shortcuts:
+  'shortcut': method
 ```
 
 -------------------------------------------------------------

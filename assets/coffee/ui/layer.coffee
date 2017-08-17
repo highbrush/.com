@@ -6,7 +6,5 @@ app.add 'layer',
     # Load store
     setTimeout ->
       layers = app.getStore('layers').getAll()
-
       _.each layers, (layer) ->
-        console.log layer
         paper.project.importJSON layer

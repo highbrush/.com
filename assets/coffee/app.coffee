@@ -54,11 +54,18 @@ app =
     $ ->
       # Setup properties
       _.set config, '_.id', id
-      _.set app._, "tool.#{id}", config
+      _.set config, 'shortcut', {}
       config = _.defaults config,
         onMouseDown: ->
         onMouseDrag: ->
         onMouseUp: ->
+      _.set app._, "tool.#{id}", config
+
+      # Attach shortcuts
+      _.each config.shortcuts, (callback, shortcut) ->
+        if _.isString callback
+          callback = config.shortcuts[shortcut] = app.getTool(id)[callback]
+        Mousetrap.bind shortcut, callback
 
       # Activate the tool
       if config.default then app.setTool id
@@ -193,7 +200,7 @@ app =
          * Removes all the records
         ###
         removeAll: () ->
-          localStorage.clear()
+          localStorage.removeItem @_.id
           @cached = {}
 
 $ ->

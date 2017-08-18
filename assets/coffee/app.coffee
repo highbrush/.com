@@ -75,6 +75,13 @@ app =
       offset = app.getStore('brushes').getItem $tool.data('brush-id')
       if !_.isEmpty offset then $tool.offset offset
 
+      # Apply styles
+      if config.css then $tool.css config.css
+
+      # Click events
+      $tool.on 'click touchstart', ->
+        app.setTool $tool.data 'brush-id'
+
       # Attach shortcuts
       _.each config.shortcuts, (callback, shortcut) ->
         if _.isString callback

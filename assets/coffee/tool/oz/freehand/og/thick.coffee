@@ -4,6 +4,11 @@
 app.addTool 'oz.freehand.og.thick',
   default: true
 
+  css:
+    background: '#333'
+    height: 80
+    width: 80
+
   shortcuts:
     'space': 'clear'
 
@@ -13,7 +18,7 @@ app.addTool 'oz.freehand.og.thick',
   onMouseDown: (event) ->
     @path = new Path()
     @path.strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16);
-    @path.strokeWidth = Math.max 2, _.random(0, 5) * 2
+    @path.strokeWidth = Math.min 40, 40 + _.random(0, 5) * 5
     @path.add event.point
 
   ###*

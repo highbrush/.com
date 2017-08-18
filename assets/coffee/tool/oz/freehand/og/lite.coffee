@@ -11,7 +11,7 @@ app.addTool 'oz.freehand.og.lite',
   onMouseDown: (event) ->
     @path = new Path()
     @path.strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16);
-    @path.strokeWidth = Math.min 40, _.random(0, 5) * 5
+    @path.strokeWidth = Math.max 2, _.random(0, 7)
     @path.add event.point
 
   ###*

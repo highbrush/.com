@@ -18,3 +18,5 @@ app.add 'ui.brush',
       # Set the offset
       offset = app.getStore('brushes').getItem $brush.data('brush-id')
       if !_.isEmpty offset then $brush.offset offset
+
+      $brush.removeClass 'hidden'

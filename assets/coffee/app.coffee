@@ -61,6 +61,20 @@ app =
         onMouseUp: ->
       _.set app._, "tool.#{id}", config
 
+      # Create the ui
+      $tool = $('<div />',
+        'class': 'highbrush-tool animate-jelly-in'
+        'data-brush-id': id).appendTo 'body'
+      $tool.pep
+        constrainTo: 'window'
+        useCSSTranslation: false
+        rest: ->
+          app.getStore('brushes').setItem @$el.data('brush-id'),
+            left: @$el.offset().left
+            top: @$el.offset().top
+      offset = app.getStore('brushes').getItem $tool.data('brush-id')
+      if !_.isEmpty offset then $tool.offset offset
+
       # Attach shortcuts
       _.each config.shortcuts, (callback, shortcut) ->
         if _.isString callback

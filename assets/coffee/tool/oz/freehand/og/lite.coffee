@@ -1,9 +1,7 @@
 ###*
  * Basic freehand tool
 ###
-app.addTool 'freehand',
-  default: true
-
+app.addTool 'oz.freehand.og.lite',
   shortcuts:
     'space': 'clear'
 
@@ -13,7 +11,7 @@ app.addTool 'freehand',
   onMouseDown: (event) ->
     @path = new Path()
     @path.strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16);
-    @path.strokeWidth = _.random 1, 100
+    @path.strokeWidth = Math.min 40, _.random(0, 5) * 5
     @path.add event.point
 
   ###*

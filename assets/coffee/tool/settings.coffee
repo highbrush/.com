@@ -21,11 +21,11 @@ app.addTool 'settings',
   # Used to position the view
   orig:
     mask:
-      x: 0
-      y: 0
+      x: -50000
+      y: -50000
     view:
-      x: 0
-      y: 0
+      x: -50000
+      y: -50000
 
   ###*
    * Load the initial view position
@@ -33,8 +33,8 @@ app.addTool 'settings',
   init: ->
     center = app.getStore('canvas').getItem 'center'
     center = _.defaults center,
-      x: 0
-      y: 0
+      x: -50000
+      y: -50000
     paper.view.center = center
 
   ###*
@@ -42,7 +42,11 @@ app.addTool 'settings',
   ###
   onActivate: ->
     ctrl = this
-    @$mask = $('<div />', {id: 'settings-interaction'}).prependTo('body')
+    @$mask = $('<div />', {
+      id: 'settings-interaction'
+      left: paper.view.center.x
+      top: paper.view.center.y
+    }).prependTo('body')
     @$mask.pep
       start: ->
         ctrl.orig =

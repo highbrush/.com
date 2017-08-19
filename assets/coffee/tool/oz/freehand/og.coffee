@@ -7,31 +7,32 @@ app.addTool 'oz.freehand.og',
   css:
     background: '#333'
 
+  paths: []
+
+  ###*
+   * Create a new path for each finger
+  ###
   onTouchStart: (event) ->
-    console.log 'onTouchStart', event
+    paths = @paths
+    _.each event.changedTouches, (touch) ->
+      path = new paper.Path()
+      path.strokeColor = app.util.getRandomColor()
+      path.strokeWidth = _.random 2, 25
+      paths[touch.identifier] = path
+    @paths = paths
+
+  ###*
+   * Draw the paths, strobing them as we go
+  ###
   onTouchMove: (event) ->
-    console.log 'onTouchMove', event
+    paths = @paths
+    _.each event.changedTouches, (touch) ->
+      id = touch.identifier
+      paths[id].strokeColor = app.util.getRandomColor()
+      paths[id].add(new Point(touch.pageX + paper.view.center.x - $(window).width()/2, touch.pageY + paper.view.center.y - $(window).height()/2))
+
+  ###*
+   * Save the paths
+  ###
   onTouchEnd: (event) ->
-    console.log 'onTouchEnd', event
-
-  ###*
-   * Create a new random stroke
-  ###
-  onMouseDown: (event) ->
-    @path = new Path()
-    @path.strokeColor = app.util.getRandomColor()
-    @path.strokeWidth = Math.max 2, _.random(0, 7)
-    @path.add event.point
-
-  ###*
-   * Strobe the color as we draw
-  ###
-  onMouseDrag: (event) ->
-    @path.strokeColor = app.util.getRandomColor()
-    @path.add event.point
-
-  ###*
-   * Save
-  ###
-  onMouseUp: (event) ->
     app.getStore('layers').setItem 1, paper.project.exportJSON()

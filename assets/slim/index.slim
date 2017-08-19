@@ -11,11 +11,15 @@ head
 body
   canvas#canvas resize=true
 
-  script src="assets/vendor/paper-core.min.js"
   script src="assets/vendor/jquery.min.js"
+  script src="assets/vendor/touch-emulator.js"
+  javascript:
+    TouchEmulator()
+  script src="assets/vendor/hammer.min.js"
+  
+  script src="assets/vendor/paper-core.min.js"
   script src="assets/vendor/lodash.min.js"
   script src="assets/vendor/firebase.js"
   script src="assets/vendor/jquery.pep.js"
   script src="assets/vendor/mousetrap.min.js"
-  script src="assets/vendor/hammer.min.js"
   script src="assets/js/app.js"

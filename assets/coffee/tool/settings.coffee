@@ -15,7 +15,6 @@ app.addTool 'settings',
       margin-top: -50000px;
       width: 100000px;
       height: 100000px;
-      background: rgba(0,0,0,0.25);
     }
   """
 

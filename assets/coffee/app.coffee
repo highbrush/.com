@@ -17,14 +17,6 @@ app =
         ctrl = app.getTool()
         if ctrl["on#{event}"] then ctrl["on#{event}"].apply ctrl, arguments
 
-    # Temp stuff
-    path = new paper.Path()
-    path.strokeColor = 'black'
-    start = new paper.Point(100, 100)
-    path.moveTo(start)
-    path.lineTo(start.add([ 200, -50 ]))
-    paper.view.draw()
-
   ###*
    * Defines a new observer object. Observers are just generic, global controllers with some happy bennies
    * @param {STRING} id     The unique id for this tool
@@ -155,10 +147,25 @@ app =
     _.get app._, "store.#{id}"
 
   ###*
+   * Utility methods
+  ###
+  util:
+    getRandomColor: () ->
+      color = '#' + Math.floor(Math.random() * 16777215).toString 16
+      console.log color
+      return color
+
+  ###*
    * Private shit, you probably shouldn't mess with this
   ###
   _:
     events: [
+      # Core Events
+      'TouchStart'
+      'TouchMove'
+      'TouchEnd'
+
+      # HammerJS
       'Pan'
       'PanStart'
       'PanMove'

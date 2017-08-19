@@ -1,20 +1,25 @@
 ###*
  * Basic freehand tool
 ###
-app.addTool 'oz.freehand.og.lite',
+app.addTool 'oz.freehand.og',
   default: true
-  
+
   css:
-    background: '#ffaacc'
-    width: 40
-    height: 40
+    background: '#333'
+
+  onTouchStart: (event) ->
+    console.log 'onTouchStart', event
+  onTouchMove: (event) ->
+    console.log 'onTouchMove', event
+  onTouchEnd: (event) ->
+    console.log 'onTouchEnd', event
 
   ###*
    * Create a new random stroke
   ###
   onMouseDown: (event) ->
     @path = new Path()
-    @path.strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+    @path.strokeColor = app.util.getRandomColor()
     @path.strokeWidth = Math.max 2, _.random(0, 7)
     @path.add event.point
 
@@ -22,7 +27,7 @@ app.addTool 'oz.freehand.og.lite',
    * Strobe the color as we draw
   ###
   onMouseDrag: (event) ->
-    @path.strokeColor = '#'+Math.floor(Math.random()*16777215).toString(16);
+    @path.strokeColor = app.util.getRandomColor()
     @path.add event.point
 
   ###*

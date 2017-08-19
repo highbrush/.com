@@ -15,7 +15,8 @@
     "lodash": "^4.17.4",
     "mousetrap": "^1.6.1",
     "normalize.css": "^7.0.0",
-    "paper": "^0.11.4"
+    "paper": "^0.11.4",
+    "jquery.pep.js": "git+https://github.com/briangonzalez/jquery.pep.js.git"
   },
   "devDependencies": {
     "firebase-tools": "^3.9.2",

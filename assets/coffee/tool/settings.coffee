@@ -15,20 +15,24 @@ app.addTool 'settings',
       y: 0
     paper.view.center = center
 
+  onPanStart: (event) ->
+    @origX = paper.view.center.x
+    @origY = paper.view.center.y
+
+
   ###*
    * Panning
   ###
-  onMouseDrag: (event) ->
+  onPanMove: (event) ->
     delta =
-      x: paper.view.center.x + event.downPoint.x - event.point.x
-      y: paper.view.center.y + event.downPoint.y - event.point.y
-
+      x: @origX - event.deltaX
+      y: @origY - event.deltaY
     paper.view.center = delta
 
   ###*
    * Save view position
   ###
-  onMouseUp: (event) ->
+  onPanEnd: (event) ->
     app.getStore('canvas').setItem 'center', _.pick(paper.view.center, ['x', 'y'])
 
   ###*

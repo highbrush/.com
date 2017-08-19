@@ -13,11 +13,17 @@ app =
 
     # Setup listeners
     _.each @._.events, (event) ->
-      console.log event
-      touch.on _.toLower(event), ->
-        console.log event
+      touch.on _.toLower(event), (touchEvent) ->
         ctrl = app.getTool()
         if ctrl["on#{event}"] then ctrl["on#{event}"].apply ctrl, arguments
+
+    # Temp stuff
+    path = new paper.Path()
+    path.strokeColor = 'black'
+    start = new paper.Point(100, 100)
+    path.moveTo(start)
+    path.lineTo(start.add([ 200, -50 ]))
+    paper.view.draw()
 
   ###*
    * Defines a new observer object. Observers are just generic, global controllers with some happy bennies

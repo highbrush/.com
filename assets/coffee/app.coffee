@@ -3,23 +3,21 @@
 ###
 paper.install window
 app =
-  ###*
-   * Setup listeners
-  ###
   init: ->
+    # Setup libs
     paper.setup 'canvas'
+    @touch = touch = new Hammer $('#canvas')[0]
+    @touch.get('pan').set
+      direction: Hammer.DIRECTION_ALL
+      threshold: 0
 
-    # Setup Tools
-    tool = new Tool()
-    tool.onMouseDown = ->
-      ctrl = app.getTool()
-      ctrl.onMouseDown.apply ctrl, arguments
-    tool.onMouseUp = ->
-      ctrl = app.getTool()
-      ctrl.onMouseUp.apply ctrl, arguments
-    tool.onMouseDrag = ->
-      ctrl = app.getTool()
-      ctrl.onMouseDrag.apply ctrl, arguments
+    # Setup listeners
+    _.each @._.events, (event) ->
+      console.log event
+      touch.on _.toLower(event), ->
+        console.log event
+        ctrl = app.getTool()
+        if ctrl["on#{event}"] then ctrl["on#{event}"].apply ctrl, arguments
 
   ###*
    * Defines a new observer object. Observers are just generic, global controllers with some happy bennies
@@ -57,9 +55,6 @@ app =
       _.set config, 'shortcut', {}
       config = _.defaults config,
         init: ->
-        onMouseDown: ->
-        onMouseDrag: ->
-        onMouseUp: ->
       _.set app._, "tool.#{id}", config
       tool = app.getTool id
 
@@ -150,8 +145,41 @@ app =
    * Private shit, you probably shouldn't mess with this
   ###
   _:
+    events: [
+      'Pan'
+      'PanStart'
+      'PanMove'
+      'PanEnd'
+      'PanCancel'
+      'PanLeft'
+      'PanRight'
+      'PanUp'
+      'PanDown'
+      'Pinch'
+      'PinchStart'
+      'PinchMove'
+      'PinchEnd'
+      'PinchCancel'
+      'PinchIn'
+      'PinchOut'
+      'Press'
+      'PressUp'
+      'Rotate'
+      'RotateStart'
+      'RotateMove'
+      'RotateEnd'
+      'RotateCancel'
+      'Swipe'
+      'SwipeLeft'
+      'SwipeRight'
+      'SwipeUp'
+      'SwipeDown'
+      'Tap'
+    ]
+
     tool:
       active: ''
+
     store:
       ###*
        * Defines the base store class

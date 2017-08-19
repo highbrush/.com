@@ -35,6 +35,9 @@ default: false
 # List of keyboard shortcuts, where shortcut is any valid keyboard shortcut string (see https://craig.is/killing/mice). Method is a STRING or FUNCTION. If it's a string then it's interpreted as a method name on the tool class, otherwise the method itself is called.
 shortcuts:
   'shortcut': method
+
+# List of touch event names to listen to. The following are available (as fired by HammerJS): Pan, PanStart, PanMove, PanEnd, PanCancel, PanLeft, PanRight, PanUp, PanDown, Pinch, PinchStart, PinchMove, PinchEnd, PinchCancel, PinchIn, PinchOut, Press, PressUp, Rotate, RotateStart, RotateMove, RotateEnd, RotateCancel, Swipe, SwipeLeft, SwipeRight, SwipeUp, SwipeDown, Tap
+on{EventName}: (event) ->
 ```
 
 -------------------------------------------------------------

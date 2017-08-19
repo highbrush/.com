@@ -32,6 +32,12 @@ app.addTool 'settings',
     app.getStore('canvas').setItem 'center', _.pick(paper.view.center, ['x', 'y'])
 
   ###*
+   * Rotate the view
+  ###
+  onRotate: (event) ->
+    console.log 'onRotate', event
+
+  ###*
    * Clear the project
   ###
   clear: ->

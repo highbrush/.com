@@ -13,7 +13,8 @@ app =
 
     # Setup listeners
     _.each @._.events, (event) ->
-      touch.on _.toLower(event), (touchEvent) ->
+      target = if _.startsWith(event, 'Touch') then $('body') else touch
+      target.on _.toLower(event), (touchEvent) ->
         ctrl = app.getTool()
         if ctrl["on#{event}"] then ctrl["on#{event}"].apply ctrl, arguments
 

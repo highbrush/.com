@@ -2,15 +2,8 @@
  * Basic freehand tool
 ###
 app.addTool 'oz.freehand.og.thick',
-  default: true
-
   css:
     background: '#333'
-    height: 80
-    width: 80
-
-  shortcuts:
-    'space': 'clear'
 
   ###*
    * Create a new random stroke
@@ -33,10 +26,3 @@ app.addTool 'oz.freehand.og.thick',
   ###
   onMouseUp: (event) ->
     app.getStore('layers').setItem 1, paper.project.exportJSON()
-
-  ###*
-   * Clear the project
-  ###
-  clear: ->
-    paper.project.clear()
-    app.getStore('layers').removeAll()

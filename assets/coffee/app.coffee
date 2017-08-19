@@ -56,15 +56,19 @@ app =
       _.set config, '_.id', id
       _.set config, 'shortcut', {}
       config = _.defaults config,
+        init: ->
         onMouseDown: ->
         onMouseDrag: ->
         onMouseUp: ->
       _.set app._, "tool.#{id}", config
+      tool = app.getTool id
 
       # Create the ui
       $tool = $('<div />',
         'class': 'highbrush-tool animate-jelly-in'
         'data-brush-id': id).appendTo 'body'
+
+      # Add drag effects
       $tool.pep
         constrainTo: 'window'
         useCSSTranslation: false
@@ -72,24 +76,36 @@ app =
           app.getStore('brushes').setItem @$el.data('brush-id'),
             left: @$el.offset().left
             top: @$el.offset().top
+
+      # Set initial position
+      $body = $ 'body'
       offset = app.getStore('brushes').getItem $tool.data('brush-id')
-      if !_.isEmpty offset then $tool.offset offset
+      if !offset or _.isEmpty offset
+        offset =
+          top: ($body.height() - $tool.height()) * Math.random() + $tool.height()
+          left: ($body.width() - $tool.width()) * Math.random() + $tool.width()
+      offset.left = Math.min offset.left, $body.width() - $tool.width()
+      offset.top = Math.min offset.top, $body.height() - $tool.height()
+      $tool.offset offset
 
       # Apply styles
       if config.css then $tool.css config.css
 
       # Click events
       $tool.on 'click touchstart', ->
-        app.setTool $tool.data 'brush-id'
+        app.setTool id
+        app.getStore('canvas').setItem 'brush', id
 
       # Attach shortcuts
       _.each config.shortcuts, (callback, shortcut) ->
         if _.isString callback
-          callback = config.shortcuts[shortcut] = app.getTool(id)[callback]
+          callback = config.shortcuts[shortcut] = tool[callback]
         Mousetrap.bind shortcut, callback
 
-      # Activate the tool
-      if config.default then app.setTool id
+      # Activate the tool and fire init
+      lastBrush = app.getStore('canvas').getItem 'brush'
+      if (config.default && !lastBrush) || lastBrush == id then app.setTool id
+      tool.init()
 
   ###*
    * Returns a tool controller (or the active one if nothing is passed)

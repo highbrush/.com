@@ -1,0 +1,1 @@
+app.addStore 'canvas'

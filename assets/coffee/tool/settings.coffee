@@ -8,6 +8,29 @@ app.addTool 'settings',
   shortcuts:
     space: 'clear'
 
+  styles: """
+    #settings-interaction {
+      position: fixed;
+      margin-left: -50000px;
+      margin-top: -50000px;
+      width: 100000px;
+      height: 100000px;
+      background: rgba(0,0,0,0.25);
+    }
+  """
+
+  # Used to position the view
+  orig:
+    mask:
+      x: 0
+      y: 0
+    view:
+      x: 0
+      y: 0
+
+  ###*
+   * Load the initial view position
+  ###
   init: ->
     center = app.getStore('canvas').getItem 'center'
     center = _.defaults center,
@@ -15,35 +38,48 @@ app.addTool 'settings',
       y: 0
     paper.view.center = center
 
-  onPanStart: (event) ->
-    @origX = paper.view.center.x
-    @origY = paper.view.center.y
+  ###*
+   * Create a draggable mask for kinetic effects, and transfer values to paper.view
+  ###
+  onActivate: ->
+    ctrl = this
+    @$mask = $('<div />', {id: 'settings-interaction'}).prependTo('body')
+    @$mask.pep
+      start: ->
+        ctrl.orig =
+          mask:
+            x: ctrl.$mask.offset().left
+            y: ctrl.$mask.offset().top
+          view:
+            x: paper.view.center.x
+            y: paper.view.center.y
 
+      drag: -> ctrl.updateView.call ctrl
+      easing: -> ctrl.updateView.call ctrl
+      stop: -> ctrl.saveView.call ctrl
+      rest: -> ctrl.saveView.call ctrl
 
   ###*
-   * Panning
+   * Translates the mask position to the view
   ###
-  onPanMove: (event) ->
-    delta =
-      x: @origX - event.deltaX
-      y: @origY - event.deltaY
-    paper.view.center = delta
+  updateView: ->
+    paper.view.center =
+      x: @orig.view.x + @orig.mask.x - @$mask.offset().left
+      y: @orig.view.y + @orig.mask.y - @$mask.offset().top
 
   ###*
-   * Save view position
+   * Saves the view position
   ###
-  onPanEnd: (event) ->
+  saveView: ->
     app.getStore('canvas').setItem 'center', _.pick(paper.view.center, ['x', 'y'])
 
   ###*
-   * Rotate the view
+   * Removes the mask
   ###
-  onRotate: (event) ->
-    console.log 'onRotate', event
+  onDeactivate: ->
+    $('#settings-interaction').remove()
 
-  ###*
-   * Clear the project
-  ###
+  # Clear the project
   clear: ->
     paper.project.clear()
     app.getStore('layers').removeAll()

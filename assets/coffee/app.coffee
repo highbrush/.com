@@ -61,6 +61,10 @@ app =
       _.set config, 'shortcut', {}
       config = _.defaults config,
         init: ->
+        onActivate: ->
+        onDeactivate: ->
+        css: {}
+        styles: ''
       _.set app._, "tool.#{id}", config
       tool = app.getTool id
 
@@ -90,7 +94,8 @@ app =
       $tool.offset offset
 
       # Apply styles
-      if config.css then $tool.css config.css
+      $tool.css config.css
+      $("<style>#{config.styles}</style>").appendTo 'head'
 
       # Click events
       $tool.on 'click touchstart', ->
@@ -123,7 +128,9 @@ app =
    * @return {OBJECT} The tool controller
   ###
   setTool: (id) ->
+    if app._.tool.active then app._.tool.active.onDeactivate()
     app._.tool.active = app.getTool id
+    app._.tool.active.onActivate()
 
   ###*
    * Adds a new store, and activates it

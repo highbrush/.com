@@ -32,12 +32,29 @@ Use the `app.addTool(id, config)` method to create new tools. `id` is a _string_
 # - Default tools
 default: false
 
+# These are added as a <style></style> in the header
+styles: """
+  selector {
+    style: value;
+  }
+"""
+
+# Applies styles directly to the tool button
+css:
+  style: 'value'
+
 # List of keyboard shortcuts, where shortcut is any valid keyboard shortcut string (see https://craig.is/killing/mice). Method is a STRING or FUNCTION. If it's a string then it's interpreted as a method name on the tool class, otherwise the method itself is called.
 shortcuts:
   'shortcut': method
 
 # List of touch event names to listen to. The following are available (as fired by HammerJS): Pan, PanStart, PanMove, PanEnd, PanCancel, PanLeft, PanRight, PanUp, PanDown, Pinch, PinchStart, PinchMove, PinchEnd, PinchCancel, PinchIn, PinchOut, Press, PressUp, Rotate, RotateStart, RotateMove, RotateEnd, RotateCancel, Swipe, SwipeLeft, SwipeRight, SwipeUp, SwipeDown, Tap
 on{EventName}: (event) ->
+
+# Additionally, the following methods are also exposed
+# called when the tool is clicked/activated
+onActivate: ->
+  # called when another tool is clicked/activated
+onDeactivate: ->
 ```
 
 -------------------------------------------------------------

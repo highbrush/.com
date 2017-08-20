@@ -41,33 +41,39 @@ app.addTool 'settings',
   ###
   onActivate: ->
     ctrl = this
-    @$mask = $('<div />', {
-      id: 'settings-interaction'
-      left: paper.view.center.x
-      top: paper.view.center.y
-    }).prependTo('body')
-    @$mask.pep
-      start: ->
-        ctrl.orig =
-          mask:
-            x: ctrl.$mask.offset().left
-            y: ctrl.$mask.offset().top
-          view:
-            x: paper.view.center.x
-            y: paper.view.center.y
 
-      drag: -> ctrl.updateView.call ctrl
-      easing: -> ctrl.updateView.call ctrl
-      stop: -> ctrl.saveView.call ctrl
-      rest: -> ctrl.saveView.call ctrl
+    if !@mask
+      @mask = $('<div />', {
+        id: 'settings-interaction'
+      }).prependTo('body')
+      @mask.pep
+        start: ->
+          ctrl.orig =
+            mask:
+              x: ctrl.mask.offset().left
+              y: ctrl.mask.offset().top
+            view:
+              x: paper.view.center.x
+              y: paper.view.center.y
+        drag: -> ctrl.updateView.call ctrl
+        easing: -> ctrl.updateView.call ctrl
+        stop: -> ctrl.saveView.call ctrl
+        rest: -> ctrl.saveView.call ctrl
+
+    @mask.show()
+    @mask.css
+      left: -50000
+      top: -50000
+      pointerEvents: 'auto'
 
   ###*
    * Translates the mask position to the view
   ###
   updateView: ->
+    console.log @mask.offset().left
     paper.view.center =
-      x: @orig.view.x + @orig.mask.x - @$mask.offset().left
-      y: @orig.view.y + @orig.mask.y - @$mask.offset().top
+      x: @orig.view.x + @orig.mask.x - @mask.offset().left
+      y: @orig.view.y + @orig.mask.y - @mask.offset().top
 
   ###*
    * Saves the view position
@@ -79,7 +85,7 @@ app.addTool 'settings',
    * Removes the mask
   ###
   onDeactivate: ->
-    $('#settings-interaction').remove()
+    @mask.css pointerEvents: 'none'
 
   # Clear the project
   clear: ->

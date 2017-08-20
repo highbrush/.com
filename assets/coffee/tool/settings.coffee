@@ -70,7 +70,6 @@ app.addTool 'settings',
    * Translates the mask position to the view
   ###
   updateView: ->
-    console.log @mask.offset().left
     paper.view.center =
       x: @orig.view.x + @orig.mask.x - @mask.offset().left
       y: @orig.view.y + @orig.mask.y - @mask.offset().top

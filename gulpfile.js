@@ -95,6 +95,7 @@ gulp.task('vendor', function () {
     'node_modules/mousetrap/mousetrap.min.js',
     'node_modules/hammerjs/hammer.min.js',
     'node_modules/hammerjs/hammer.min.map',
+    'assets/vendor/touch-emulator.js',
     'assets/vendor/lodash.min.js'
   ])
     .pipe(gulp.dest('public/assets/vendor/'));

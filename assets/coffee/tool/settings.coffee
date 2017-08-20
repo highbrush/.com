@@ -8,32 +8,102 @@ app.addTool 'settings',
   shortcuts:
     space: 'clear'
 
+  styles: """
+    #settings-interaction {
+      position: fixed;
+      margin-left: -50000px;
+      margin-top: -50000px;
+      width: 100000px;
+      height: 100000px;
+    }
+  """
+
+  # Used to position the view
+  orig:
+    mask:
+      x: -50000
+      y: -50000
+    view:
+      x: -50000
+      y: -50000
+
+  rotation:
+    view: 0
+    orig: 0
+
+  ###*
+   * Load the initial view position
+  ###
   init: ->
     center = app.getStore('canvas').getItem 'center'
     center = _.defaults center,
-      x: 0
-      y: 0
+      x: -50000
+      y: -50000
     paper.view.center = center
 
   ###*
-   * Panning
+   * Create a draggable mask for kinetic effects, and transfer values to paper.view
   ###
-  onMouseDrag: (event) ->
-    delta =
-      x: paper.view.center.x + event.downPoint.x - event.point.x
-      y: paper.view.center.y + event.downPoint.y - event.point.y
+  onActivate: ->
+    ctrl = this
+    @$mask = $('<div />', {
+      id: 'settings-interaction'
+      left: paper.view.center.x
+      top: paper.view.center.y
+    }).prependTo('body')
+    @$mask.pep
+      start: ->
+        ctrl.orig =
+          mask:
+            x: ctrl.$mask.offset().left
+            y: ctrl.$mask.offset().top
+          view:
+            x: paper.view.center.x
+            y: paper.view.center.y
 
-    paper.view.center = delta
+      drag: -> ctrl.updateView.call ctrl
+      easing: -> ctrl.updateView.call ctrl
+      stop: -> ctrl.saveView.call ctrl
+      rest: -> ctrl.saveView.call ctrl
 
   ###*
-   * Save view position
+   * Remember original values
   ###
-  onMouseUp: (event) ->
+  onRotateStart: (event) ->
+    @rotation =
+      view: paper.project.activeLayer.rotation
+      delta: event.rotation
+
+  ###*
+   * Do rotation
+  ###
+  onRotateMove: (event) ->
+    console.log event.rotation
+    paper.project.activeLayer.rotate event.rotation - @rotation.delta,
+      x: event.center.x + app.util.getCenterX()
+      y: event.center.y + app.util.getCenterY()
+
+  ###*
+   * Translates the mask position to the view
+  ###
+  updateView: ->
+    paper.view.center =
+      x: @orig.view.x + @orig.mask.x - @$mask.offset().left
+      y: @orig.view.y + @orig.mask.y - @$mask.offset().top
+
+  ###*
+   * Saves the view position
+  ###
+  saveView: ->
     app.getStore('canvas').setItem 'center', _.pick(paper.view.center, ['x', 'y'])
 
   ###*
-   * Clear the project
+   * Removes the mask
   ###
+  onDeactivate: ->
+    $('#settings-interaction').remove()
+
+  # Clear the project
   clear: ->
     paper.project.clear()
     app.getStore('layers').removeAll()

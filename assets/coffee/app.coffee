@@ -10,8 +10,6 @@ app =
     @touch.get('pan').set
       direction: Hammer.DIRECTION_ALL
       threshold: 0
-    @touch.get('rotate').set
-      enable: true
 
     # Setup listeners
     _.each @._.events, (event) ->
@@ -214,11 +212,11 @@ app =
       'PinchOut'
       'Press'
       'PressUp'
-      'Rotate'
-      'RotateStart'
-      'RotateMove'
-      'RotateEnd'
-      'RotateCancel'
+      # 'Rotate'
+      # 'RotateStart'
+      # 'RotateMove'
+      # 'RotateEnd'
+      # 'RotateCancel'
       'Swipe'
       'SwipeLeft'
       'SwipeRight'

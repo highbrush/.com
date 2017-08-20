@@ -29,7 +29,7 @@ app.addTool 'oz.freehand.og',
     _.each event.changedTouches, (touch) ->
       id = touch.identifier
       paths[id].strokeColor = app.util.getRandomColor()
-      paths[id].add(new Point(touch.pageX + paper.view.center.x - $(window).width()/2, touch.pageY + paper.view.center.y - $(window).height()/2))
+      paths[id].add(new Point(touch.pageX + app.util.getCenterX(), touch.pageY + app.util.getCenterY()))
 
   ###*
    * Save the paths

@@ -27,6 +27,10 @@ app.addTool 'settings',
       x: -50000
       y: -50000
 
+  rotation:
+    view: 0
+    orig: 0
+
   ###*
    * Load the initial view position
   ###
@@ -61,6 +65,23 @@ app.addTool 'settings',
       easing: -> ctrl.updateView.call ctrl
       stop: -> ctrl.saveView.call ctrl
       rest: -> ctrl.saveView.call ctrl
+
+  ###*
+   * Remember original values
+  ###
+  onRotateStart: (event) ->
+    @rotation =
+      view: paper.project.activeLayer.rotation
+      delta: event.rotation
+
+  ###*
+   * Do rotation
+  ###
+  onRotateMove: (event) ->
+    console.log event.rotation
+    paper.project.activeLayer.rotate event.rotation - @rotation.delta,
+      x: event.center.x + app.util.getCenterX()
+      y: event.center.y + app.util.getCenterY()
 
   ###*
    * Translates the mask position to the view

@@ -6,10 +6,12 @@ app =
   init: ->
     # Setup libs
     paper.setup 'canvas'
-    @touch = touch = new Hammer $('#canvas')[0]
+    @touch = touch = new Hammer $('body')[0]
     @touch.get('pan').set
       direction: Hammer.DIRECTION_ALL
       threshold: 0
+    @touch.get('rotate').set
+      enable: true
 
     # Setup listeners
     _.each @._.events, (event) ->
@@ -17,6 +19,14 @@ app =
       target.on _.toLower(event), (touchEvent) ->
         ctrl = app.getTool()
         if ctrl["on#{event}"] then ctrl["on#{event}"].apply ctrl, arguments
+
+    # Set variables on window change
+    $window = $ window
+    $window.on 'resize', ->
+      app._.size.width = $window.width()
+      app._.size.height = $window.height()
+    $window.trigger 'resize'
+
 
   ###*
    * Defines a new observer object. Observers are just generic, global controllers with some happy bennies
@@ -151,14 +161,34 @@ app =
    * Utility methods
   ###
   util:
+    ###*
+     * Gets a random RGB hex color
+     * @return {STRING} an RGB hex color
+    ###
     getRandomColor: () ->
       color = '#' + Math.floor(Math.random() * 16777215).toString 16
       return color
+
+    ###*
+     * Gets the view's center
+    ###
+    getCenterX: -> paper.view.center.x - app._.size.width / 2
+    getCenterY: -> paper.view.center.y - app._.size.height / 2
+
+    ###*
+     * Gets the cached window width
+    ###
+    getWindowWidth: -> $(window).width()/2
+
 
   ###*
    * Private shit, you probably shouldn't mess with this
   ###
   _:
+    size:
+      width: 0
+      height: 0
+
     events: [
       # Core Events
       'TouchStart'
